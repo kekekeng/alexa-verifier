@@ -1,4 +1,4 @@
-var request = require('request')
+var { URL } = require('url')
 
 
 // default in-memory cache for downloaded certificates
@@ -14,8 +14,13 @@ module.exports = function fetchCert(options, callback) {
     process.nextTick(callback, undefined, cachedResponse, servedFromCache)
     return
   }
-
-  request.get(url.href, function(er, response, body) {
+  var parsedUrl = url.parse(url.href, true, true);
+  var newOptions = {
+    hostname: parsedUrl.hostname,
+    port: parsedUrl.port,
+    path: parsedUrl.path
+  }
+  req = http.request(newOptions, function(er, response, body) {
     var statusCode
     if (response && 200 === response.statusCode) {
       cache[url.href] = body
@@ -25,4 +30,5 @@ module.exports = function fetchCert(options, callback) {
       callback('Failed to download certificate at: ' + url.href + '. Response code: ' + statusCode + ', error: ' + er)
     }
   })
+  req.end()
 }

@@ -1,6 +1,5 @@
 var crypto          = require('crypto')
 var fetchCert       = require('./fetch-cert')
-var request         = require('request')
 var url             = require('url')
 var validateCert    = require('./validate-cert')
 var validateCertUri = require('./validate-cert-uri')
